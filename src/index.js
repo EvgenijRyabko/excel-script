@@ -27,8 +27,6 @@ const start = async () => {
       const startIndex = parsedData.findIndex((el) => el.name.includes("МОЛ"));
       const groupedData = groupDataByFIO(parsedData, startIndex);
 
-      groupedData.map((el) => console.log(el));
-
       //* Check directory for file exist
       const checkPath = await checkDirectory(`parseResult/${fileName}`);
       if (!checkPath)
