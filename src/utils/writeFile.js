@@ -1,6 +1,6 @@
 import * as excel from "excel4node";
 
-export const writeFile = async (FIO, data, path) => {
+export const writeFile = async (account, FIO, data, path) => {
   const workbook = new excel.Workbook({
     defaultFont: {
       name: "Arial",
@@ -56,19 +56,19 @@ export const writeFile = async (FIO, data, path) => {
       .string("2210")
       .style(centeredStyle);
     ws.cell(11 + i, 3)
-      .string(data[i].units)
+      .string(data[i].units || "")
       .style(centeredStyle);
     ws.cell(11 + i, 4)
-      .number(data[i].priceInRUB || 0)
+      .number(data[i].price || 0)
       .style(centeredStyle);
     ws.cell(11 + i, 5)
-      .string("221")
+      .string(account)
       .style(centeredStyle);
     ws.cell(11 + i, 6)
-      .number(data[i].restForMonthEnd_Amount)
+      .number(data[i].restForMonthEnd_Amount || 0)
       .style(centeredStyle);
     ws.cell(11 + i, 7)
-      .number(data[i].restForMonthEnd_Price)
+      .number(data[i].restForMonthEnd_Price || 0)
       .style(centeredStyle);
     ws.cell(11 + i, 8).string("");
   }

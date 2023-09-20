@@ -1,27 +1,19 @@
-export const parseData = (data) => {
+export const parseData = (
+  data,
+  /** @type { { name: string; price: string; units: string; rest: string; account: string } } */ headerPlaces
+) => {
   return data.map((el) => {
-    delete el["__EMPTY"];
-
-    let name;
-
-    for (const key in el) {
-      if (key.includes("ОБОРОТНАЯ")) name = el[key];
-    }
-
     return {
-      name: name || "",
-      nomNumber: el["__EMPTY_1"] ? el["__EMPTY_1"] : "",
-      units: el["__EMPTY_2"] ? el["__EMPTY_2"] : "",
-      priceInUAH: el["__EMPTY_3"] ? el["__EMPTY_3"] : 0,
-      priceInRUB: el["__EMPTY_4"] ? el["__EMPTY_4"] : 0,
-      restForMonthBegin_Amount: el["__EMPTY_5"] ? el["__EMPTY_5"] : 0,
-      restForMonthBegin_Price: el["__EMPTY_6"] ? el["__EMPTY_6"] : 0,
-      turnover_Received_Amount: el["__EMPTY_7"] ? el["__EMPTY_7"] : 0,
-      turnover_Received_Price: el["__EMPTY_8"] ? el["__EMPTY_8"] : 0,
-      turnover_Used_Amount: el["__EMPTY_9"] ? el["__EMPTY_9"] : 0,
-      turnover_Used_Price: el["__EMPTY_10"] ? el["__EMPTY_10"] : 0,
-      restForMonthEnd_Amount: el["__EMPTY_11"] ? el["__EMPTY_11"] : 0,
-      restForMonthEnd_Price: el["__EMPTY_12"] ? el["__EMPTY_12"] : 0,
+      name: el[headerPlaces.name],
+      units: el[headerPlaces.units],
+      price: el[headerPlaces.price],
+      restForMonthEnd_Amount: el[headerPlaces.rest],
+      restForMonthEnd_Price:
+        el[
+          `${headerPlaces.rest.split("EMPTY_")[0]}EMPTY_${
+            parseInt(headerPlaces.rest.split("EMPTY_")[1]) + 1
+          }`
+        ],
     };
   });
 };
@@ -31,9 +23,14 @@ export const groupDataByFIO = (data, startIndex) => {
   const result = [];
 
   for (let i = startIndex; i < data.length; i++) {
+    if (!data[i].name) continue;
     if (data[i].name.includes("МОЛ")) {
       result.push({
-        FIO: data[i].name.split(":")[1].trimStart(),
+        FIO: data[i].name
+          .split(":")
+          .reduce((arr, el, i) => (i === 0 ? arr : (arr = [...arr, el])), [])
+          .join(" ")
+          .trimStart(),
         data: [],
       });
     } else {

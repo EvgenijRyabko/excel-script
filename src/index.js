@@ -2,6 +2,7 @@ import { checkDirectory } from "./utils/checkDir.js";
 import { rl } from "./utils/readline.js";
 import { writeFile } from "./utils/writeFile.js";
 import { parseData, groupDataByFIO } from "./utils/parsers.js";
+import { findHeadersPlaces } from "./utils/findHeadersPlaces.js";
 import * as xlsx from "xlsx/xlsx.mjs";
 import * as fs from "fs";
 
@@ -22,9 +23,17 @@ const start = async () => {
       //* Get data from excel file
       const data = await parseFile(`filesToParse/${fileName}.xlsx`);
 
+      const startIndex = data.findIndex((el) => {
+        for (const key in el) {
+          if (el[key].includes("МОЛ")) return el;
+        }
+      });
+
+      //* Find header places to use them as column key
+      const headerPlaces = findHeadersPlaces(data.slice(0, startIndex));
+
       //* Parse data
-      const parsedData = parseData(data);
-      const startIndex = parsedData.findIndex((el) => el.name.includes("МОЛ"));
+      const parsedData = parseData(data, headerPlaces);
       const groupedData = groupDataByFIO(parsedData, startIndex);
 
       //* Check directory for file exist
@@ -35,6 +44,7 @@ const start = async () => {
       //* Creating new xlsx files foreach person
       for (let i = 0; i < groupedData.length; i++) {
         await writeFile(
+          headerPlaces.account,
           groupedData[i].FIO,
           groupedData[i].data,
           `parseResult/${fileName}`
