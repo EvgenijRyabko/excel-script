@@ -1,6 +1,5 @@
 export const parseData = (data) => {
   return data.map((el) => {
-    console.log(el);
     delete el["__EMPTY"];
 
     let name;
