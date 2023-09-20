@@ -97,14 +97,16 @@ const writeFile = async (FIO, data) => {
   ws.cell(10, 6).string("Кол-во").style(centeredStyle);
   ws.cell(10, 7).string("Сумма").style(centeredStyle);
 
-  ws.cell(11 + i, 1).string(data[i].name);
-  ws.cell(11 + i, 2).string("2210");
-  ws.cell(11 + i, 3).string(data[i].units);
-  ws.cell(11 + i, 4).number(data[i]?.priceInRUB || 0);
-  ws.cell(11 + i, 5).string("221");
-  ws.cell(11 + i, 6).number(data[i].restForMonthEnd_Amount);
-  ws.cell(11 + i, 7).number(data[i].restForMonthEnd_Price);
-  ws.cell(11 + i, 8).string("");
+  for (let i = 0; i < data.length; i++) {
+    ws.cell(11 + i, 1).string(data[i].name);
+    ws.cell(11 + i, 2).string("2210");
+    ws.cell(11 + i, 3).string(data[i].units);
+    ws.cell(11 + i, 4).number(data[i]?.priceInRUB || 0);
+    ws.cell(11 + i, 5).string("221");
+    ws.cell(11 + i, 6).number(data[i].restForMonthEnd_Amount);
+    ws.cell(11 + i, 7).number(data[i].restForMonthEnd_Price);
+    ws.cell(11 + i, 8).string("");
+  }
 
   workbook.write(`${FIO}.xlsx`);
 };
