@@ -1,9 +1,10 @@
 export const parseData = (
   data,
-  /** @type { { name: string; price: string; units: string; rest: string; account: string } } */ headerPlaces
+  /** @type { { name: string; price: string; units: string; rest: string; account: string; nomNumber: string } } */ headerPlaces
 ) => {
   return data.map((el) => {
     return {
+      nomNumber: `${el[headerPlaces.nomNumber] || ""}`,
       name: el[headerPlaces.name],
       units: el[headerPlaces.units],
       price: el[headerPlaces.price],

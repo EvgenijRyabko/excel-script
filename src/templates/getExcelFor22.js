@@ -1,6 +1,6 @@
 import * as excel from "excel4node";
 
-export const writeFile = async (account, FIO, data, path) => {
+export const getExcelFor22 = async (account, FIO, data, path) => {
   const workbook = new excel.Workbook({
     defaultFont: {
       name: "Arial",
@@ -24,10 +24,10 @@ export const writeFile = async (account, FIO, data, path) => {
   ws.cell(7, 3)
     .string(
       `
-	  "${FIO}
- МПК ФГБОУ ВО ""ЛГПУ""
- не указано"
-	  `
+		 "${FIO}
+	МПК ФГБОУ ВО ""ЛГПУ""
+	не указано"
+		 `
     )
     .style(centeredStyle);
 
@@ -72,6 +72,5 @@ export const writeFile = async (account, FIO, data, path) => {
       .style(centeredStyle);
     ws.cell(11 + i, 8).string("");
   }
-
   workbook.write(`${path}/${FIO}.xlsx`);
 };
