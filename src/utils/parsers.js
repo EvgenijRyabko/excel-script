@@ -1,3 +1,13 @@
+import * as xlsx from "xlsx/xlsx.mjs";
+import * as fs from "fs";
+
+export const parseFile = async (file) => {
+  const buf = fs.readFileSync(file);
+  const workbook = xlsx.read(buf);
+  const sheet_name_list = workbook.SheetNames;
+  return xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[5]]);
+};
+
 export const parseData = (
   data,
   /** @type { { name: string; price: string; units: string; rest: string; account: string; nomNumber: string } } */ headerPlaces
