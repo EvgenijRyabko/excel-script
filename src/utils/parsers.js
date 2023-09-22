@@ -1,11 +1,19 @@
 import * as xlsx from "xlsx/xlsx.mjs";
 import * as fs from "fs";
 
-export const parseFile = async (file) => {
+export const parseFile = async (file, monthName) => {
   const buf = fs.readFileSync(file);
   const workbook = xlsx.read(buf);
   const sheet_name_list = workbook.SheetNames;
-  return xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[5]]);
+  const monthIndex = sheet_name_list.findIndex((el) =>
+    el.toLowerCase().includes(monthName)
+  );
+
+  if (monthIndex <= 0)
+    throw new Error(
+      `В файле отсутствует данные для данного месяца либо лист не назван именем месяца!.`
+    );
+  return xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[monthIndex]]);
 };
 
 export const parseData = (
@@ -15,7 +23,7 @@ export const parseData = (
   return data.map((el) => {
     return {
       nomNumber: `${el[headerPlaces.nomNumber] || ""}`,
-      name: el[headerPlaces.name],
+      name: el[headerPlaces.name]?.trimStart(),
       units: el[headerPlaces.units],
       price: el[headerPlaces.price],
       restForMonthEnd_Amount: el[headerPlaces.rest],

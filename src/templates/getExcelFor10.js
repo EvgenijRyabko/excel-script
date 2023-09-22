@@ -42,8 +42,13 @@ export const getExcelFor10 = async (account, FIO, data, path) => {
 МПК ФГБОУ ВО "ЛГПУ"
 не указано`
     )
-    .style({ alignment: "left" })
-    .style({ font: { bold: true, underline: true } });
+    .style({
+      alignment: {
+        horizontal: "left",
+        wrapText: true,
+      },
+      font: { bold: true, underline: true },
+    });
 
   ws.row(7).setHeight(36);
   ws.row(9).setHeight(50);
@@ -105,15 +110,25 @@ export const getExcelFor10 = async (account, FIO, data, path) => {
     //  ws.cell(11 + i, 2)
     //    .string("2210")
     //    .style(centeredStyle);
-    ws.cell(11 + i, 3)
-      .string(data[i].nomNumber || "")
-      .style(centeredStyle);
-    ws.cell(11 + i, 4)
-      .string(data[i].units || "")
-      .style(centeredStyle);
     if (
-      !["всего", "итого"].some((el) => data[i].name.toLowerCase().includes(el))
+      ["всего", "итого"].some((el) => data[i].name.toLowerCase().includes(el))
     ) {
+      ws.cell(11 + i, 1)
+        .string(data[i].name)
+        .style({ font: { bold: true } });
+      ws.cell(11 + i, 7)
+        .number(data[i].restForMonthEnd_Amount || 0)
+        .style(centeredStyle)
+        .style({ font: { bold: true } });
+      ws.cell(11 + i, 8)
+        .number(data[i].restForMonthEnd_Price || 0)
+        .style(centeredStyle)
+        .style({ font: { bold: true } });
+    } else if (data[i].name.toLowerCase().includes("спецсчет")) {
+      ws.cell(11 + i, 1)
+        .string(data[i].name)
+        .style({ font: { bold: true } });
+    } else {
       ws.cell(11 + i, 1).string(data[i].name);
       ws.cell(11 + i, 5)
         .number(data[i].price || 0)
@@ -127,18 +142,12 @@ export const getExcelFor10 = async (account, FIO, data, path) => {
       ws.cell(11 + i, 8)
         .number(data[i].restForMonthEnd_Price || 0)
         .style(centeredStyle);
-    } else {
-      ws.cell(11 + i, 1)
-        .string(data[i].name)
-        .style({ font: { bold: true } });
-      ws.cell(11 + i, 7)
-        .number(data[i].restForMonthEnd_Amount || 0)
-        .style(centeredStyle)
-        .style({ font: { bold: true } });
-      ws.cell(11 + i, 8)
-        .number(data[i].restForMonthEnd_Price || 0)
-        .style(centeredStyle)
-        .style({ font: { bold: true } });
+      ws.cell(11 + i, 3)
+        .string(data[i].nomNumber || "")
+        .style(centeredStyle);
+      ws.cell(11 + i, 4)
+        .string(data[i].units || "")
+        .style(centeredStyle);
     }
     ws.cell(11 + i, 9).string("");
     ws.cell(11 + i, 10).string("");

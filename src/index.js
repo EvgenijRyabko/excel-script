@@ -25,7 +25,7 @@ const start = async () => {
           const fileName = file.split(".xls")[0];
 
           //* Get data from excel file
-          const data = await parseFile(`filesToParse/${fileName}.xlsx`);
+          const data = await parseFile(`filesToParse/${fileName}.xlsx`, "июнь");
 
           const startIndex = data.findIndex((el) => {
             for (const key in el) {
@@ -97,6 +97,14 @@ const start = async () => {
                   "\n-\t\t\t-\nДля 12 счета case еще не написан\n-\t\t\t-\n"
                 );
                 break;
+              case "20":
+                await templates.getExcelFor20(
+                  headerPlaces.account,
+                  groupedData[i].FIO,
+                  groupedData[i].data,
+                  `parseResult/${headerPlaces.account.slice(0, 2)}/${fileName}`
+                );
+                break;
               case "22":
                 await templates.getExcelFor22(
                   headerPlaces.account,
@@ -132,7 +140,7 @@ const start = async () => {
           fileCount = 0;
           skippedFiles = 0;
         } catch (e) {
-          console.log("\x1b[31m", `${e.message}\x1b[0m`);
+          console.log("\x1b[31m", ` File [${file}]: ${e.message}\x1b[0m`);
         }
       });
     } catch (error) {

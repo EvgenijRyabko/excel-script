@@ -1,6 +1,6 @@
 import * as excel from "excel4node";
 
-export const getExcelFor23 = async (account, FIO, data, path) => {
+export const getExcelFor20 = async (account, FIO, data, path) => {
   const workbook = new excel.Workbook({
     defaultFont: {
       name: "Arial",
@@ -23,7 +23,7 @@ export const getExcelFor23 = async (account, FIO, data, path) => {
     .style(centeredStyle)
     .style({ font: { bold: true } });
   ws.cell(4, 1, 4, 8, true)
-    .string("по счету 23")
+    .string("по счету 20")
     .style(centeredStyle)
     .style({ font: { bold: true } });
   ws.cell(5, 1, 5, 8, true)
